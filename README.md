@@ -5,7 +5,7 @@ The program organizes the music files into albums for each month given the date 
 This program will create the following directory structure:
 
 ```
-<path>/<album_prefix> <year>.<month>/<num> <artist> - <track>.mp3
+<path>/<album_prefix> <year>-<month>/<num> <artist> - <track>.mp3
 ```
 
 ## Requirements
