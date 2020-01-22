@@ -31,7 +31,6 @@ def get_videos(channel_name):
         playlistId = playlist_id,
         maxResults = 50
     )
-    LIMIT = 50
     while playlistitems_request:
         playlistitems_response = playlistitems_request.execute()
         for playlist_item in playlistitems_response['items']:
@@ -47,5 +46,6 @@ def get_videos(channel_name):
             playlistitems_request, playlistitems_response)
         playlistitems_request = None # TODO remove this line
 
-    logging.info('fetched ' + #videos ' videos from youtube')
+    logging.info('fetched ' + str(len(videos)) + ' videos from youtube')
     return videos
+
