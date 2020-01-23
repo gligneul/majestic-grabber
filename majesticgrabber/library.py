@@ -10,7 +10,7 @@ from majesticgrabber import config
 Tags = collections.namedtuple('Tags', 'position artist track album '
         'album_artist year')
 Music = collections.namedtuple('Music', 'id path tags')
-Cover = collections.namedtuple('Cover', 'img path')
+Cover = collections.namedtuple('Cover', 'path url')
 Missing = collections.namedtuple('Missing', 'dirs musics covers')
 
 ALBUM_ARTIST = 'Majestic Casual'
@@ -81,7 +81,7 @@ def _missing_covers(albums):
             continue
         for video in album:
             if video.thumbnail:
-                missing.append(Cover(video.thumbnail, path))
+                missing.append(Cover(path, video.thumbnail['url']))
                 break
         else:
             logging.warn('no cover for album ' + album_name)
