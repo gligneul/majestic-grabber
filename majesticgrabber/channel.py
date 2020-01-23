@@ -6,6 +6,8 @@ import collections
 import googleapiclient.discovery
 from majesticgrabber import config
 
+logging.getLogger('googleapiclient.discovery').disabled = True
+
 Video = collections.namedtuple('Video', 'id title date thumbnail')
 
 def get_videos(channel_name):
