@@ -10,12 +10,13 @@ logging.getLogger('googleapiclient.discovery').disabled = True
 
 Video = collections.namedtuple('Video', 'id title date thumbnail')
 
-def get_videos(channel_name):
+def create_client():
     logging.info('creating youtube client')
-    youtube = googleapiclient.discovery.build('youtube', 'v3',
+    return googleapiclient.discovery.build('youtube', 'v3',
             cache_discovery = False, developerKey = config.youtube.key)
-    
-    logging.info('fetching youtube channel playlist')
+
+def fetch_uploads(youtube, channel_name):
+    logging.info('fetching upload playlist id')
     channels_response = youtube.channels().list(
         part = 'contentDetails',
         forUsername = channel_name
@@ -24,9 +25,15 @@ def get_videos(channel_name):
     if not channel:
         logging.error('channel not found')
         return None
-    playlist_id = channel['contentDetails']['relatedPlaylists']['uploads']
+    return channel['contentDetails']['relatedPlaylists']['uploads']
 
-    logging.info('fetching playlist videos')
+def get_best_thumbnail(item):
+    thumbnails = [t for t in item['thumbnails'].values()]
+    thumbnails.sort(key=lambda t: t['width'], reverse=True)
+    return thumbnails[0]['url']
+
+def fetch_videos(youtube, playlist_id):
+    logging.info('fetching videos')
     videos = []
     playlistitems_request = youtube.playlistItems().list(
         part = 'snippet',
@@ -41,13 +48,20 @@ def get_videos(channel_name):
                 item['resourceId']['videoId'],
                 item['title'],
                 item['publishedAt'],
-                item['thumbnails'].get('maxres', None)
+                get_best_thumbnail(item)
             )
             videos.append(video)
         playlistitems_request = youtube.playlistItems().list_next(
             playlistitems_request, playlistitems_response)
         playlistitems_request = None # TODO remove this line
+    return videos
 
+def get_videos(channel_name):
+    youtube = create_client()
+    uploads = fetch_uploads(youtube, channel_name)
+    if not uploads:
+        return None
+    videos = fetch_videos(youtube, uploads)
     logging.info('fetched ' + str(len(videos)) + ' videos from youtube')
     return videos
 
