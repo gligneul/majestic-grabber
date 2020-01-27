@@ -53,7 +53,6 @@ def fetch_videos(youtube, playlist_id):
             videos.append(video)
         playlistitems_request = youtube.playlistItems().list_next(
             playlistitems_request, playlistitems_response)
-        playlistitems_request = None # TODO remove this line
     return videos
 
 def get_videos(channel_name):
