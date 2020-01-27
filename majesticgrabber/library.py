@@ -37,7 +37,7 @@ def _parse_title(title):
 
 def _create_dir_if_absent(dir):
     if not dir.exists():
-        logging.info('creating dir ' + dir)
+        logging.info('creating dir ' + str(dir))
         dir.mkdir()
 
 def _create_dirs(albums):
@@ -53,6 +53,7 @@ def _get_mp3(video, album_name, pos, artist, track):
     path = _base_path() / album_name / track_name
     if path.exists():
         return
+    logging.info('getting music ' + str(path))
     mp3dl.download(video.id, path.basename())
     thumbnail_path = path.with_suffix('.jpg')
     thumbnail = cover.get_and_resize(thumbnail_path, video.thumbnail)
