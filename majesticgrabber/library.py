@@ -53,11 +53,11 @@ def _get_mp3(video, album_name, pos, artist, track):
     path = _base_path() / album_name / track_name
     if path.exists():
         return
-    mp3dl.download(video.id, path)
+    mp3dl.download(video.id, path.basename())
     thumbnail_path = path.with_suffix('.jpg')
     thumbnail = cover.get_and_resize(thumbnail_path, video.thumbnail)
     tagger.set_tags(path, pos, artist, track, album_name, ALBUM_ARTIST,
-                    video.date[:4], thumbnail_path)
+                    video.date[:4], video.id, thumbnail_path)
     thumbnail_path.unlink()
 
 def _download_music(albums):
