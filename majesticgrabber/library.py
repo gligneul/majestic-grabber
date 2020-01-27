@@ -54,7 +54,7 @@ def _get_mp3(video, album_name, pos, artist, track):
     if path.exists():
         return
     logging.info('getting music ' + str(path))
-    mp3dl.download(video.id, str(path.with_suffix('')))
+    mp3dl.download(video.id, str(path))
     thumbnail_path = path.with_suffix('.jpg')
     thumbnail = cover.get_and_resize(thumbnail_path, video.thumbnail)
     tagger.set_tags(path, pos, artist, track, album_name, ALBUM_ARTIST,
