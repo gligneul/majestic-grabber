@@ -58,7 +58,7 @@ def _get_mp3(video, album_name, pos, artist, track):
         try:
             mp3dl.download(video.id, str(path))
             break
-        except youtube_dl.utils.DownloadError:
+        except:
             logging.info('download failed in try ' + str(i))
     else:
         return False
