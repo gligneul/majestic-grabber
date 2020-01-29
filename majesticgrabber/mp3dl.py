@@ -16,6 +16,7 @@ def download(id, path):
     }]
     without_suffix = os.path.splitext(path)[0]
     ydl_opts = {
+        'ratelimit': 1048576,
         'postprocessors': postprocessors,
         'outtmpl': without_suffix + '.%(ext)s',
         'format': 'bestaudio/best',

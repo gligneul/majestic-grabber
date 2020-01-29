@@ -5,6 +5,8 @@ import collections
 import logging
 import re
 import pathlib
+import random
+import time
 from majesticgrabber import config, cover, mp3dl, tagger
 
 ALBUM_ARTIST = 'Majestic Casual'
@@ -72,6 +74,10 @@ def _get_mp3(video, album_name, pos, artist, track):
     tagger.set_tags(path, pos, artist, track, album_name, ALBUM_ARTIST,
                     video.date[:4], video.id, thumbnail_path)
     thumbnail_path.unlink()
+    # Throttles the download to avoid being blacklisted by youtube
+    sleeping_time = random.uniform(0.5, 1)
+    logging.info('sleeping for: ' + str(sleeping_time) + 's')
+    time.sleep(sleeping_time)
 
 def _download_music(albums):
     for album_name, album in albums.items():
