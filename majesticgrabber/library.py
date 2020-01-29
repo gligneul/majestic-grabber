@@ -48,9 +48,14 @@ def _create_dirs(albums):
         if not album_path.exists():
             _create_dir_if_absent(album_path)
 
+def _track_name(pos, artist, track):
+    patt = r'[\\/*?:"<>|]'
+    artist = re.sub(patt, '', artist)
+    track = re.sub(patt, '', track)
+    return '{:02d} {} - {}.mp3'.format(pos, artist, track)
+
 def _get_mp3(video, album_name, pos, artist, track):
-    track_name = '{:02d} {} - {}.mp3'.format(pos, artist, track)
-    path = _base_path() / album_name / track_name
+    path = _base_path() / album_name / _track_name(pos, artist, track)
     if path.exists():
         return
     logging.info('getting music ' + str(path))
