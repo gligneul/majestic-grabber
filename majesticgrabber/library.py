@@ -61,13 +61,12 @@ def _get_mp3(video, album_name, pos, artist, track):
         except:
             logging.info('download failed in try ' + str(i))
     else:
-        return False
+        return
     thumbnail_path = path.with_suffix('.jpg')
     thumbnail = cover.get_and_resize(thumbnail_path, video.thumbnail)
     tagger.set_tags(path, pos, artist, track, album_name, ALBUM_ARTIST,
                     video.date[:4], video.id, thumbnail_path)
     thumbnail_path.unlink()
-    return True
 
 def _download_music(albums):
     for album_name, album in albums.items():
@@ -77,8 +76,8 @@ def _download_music(albums):
             if not parse_result:
                 logging.info('ignoring video "' + video.title + '"')
                 continue
-            if _get_mp3(video, album_name, pos, *parse_result):
-                pos += 1
+            _get_mp3(video, album_name, pos, *parse_result)
+            pos += 1
 
 def _download_covers(albums):
     for album_name, album in albums.items():
